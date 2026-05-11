@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>決算分析</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Financial Analysis</p>
+            <h1>決算分析</h1>
+          </div>
+          <div class="meta">
+            <span>Memory</span>
+            <span>CY基準</span>
+            <span>四半期比較</span>
+          </div>
+        </header>
+
+        <nav class="page-tabs" aria-label="ページ切替">
+          <button class="active" data-page="company" type="button">企業別ビュー</button>
+          <button data-page="metric" type="button">指標比較</button>
+          <button data-page="raw" type="button">生データ</button>
+        </nav>
+
+        <section id="companyPage" class="page-section active">
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Company View</p>
+                <h2>表示する企業</h2>
+              </div>
+              <span id="companyModeBadge" class="status-badge neutral">単独表示</span>
+            </div>
+            <div id="companySelector" class="checkbox-grid"></div>
+          </div>
+
+          <section id="companySummary" class="summary-grid" aria-label="企業サマリー"></section>
+
+          <section class="chart-grid" aria-label="企業別チャート">
+            <div class="panel chart-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Selected Companies</p>
+                  <h2 id="companyChartTitle">企業別の推移</h2>
+                </div>
+                <div id="companyLegend" class="chart-legend"></div>
+              </div>
+              <div class="range-controls" role="tablist" aria-label="表示期間">
+                <button class="active" data-range="4" type="button">直近4四半期</button>
+                <button data-range="8" type="button">2年</button>
+                <button data-range="12" type="button">3年</button>
+                <button data-range="20" type="button">5年</button>
+                <button data-range="40" type="button">10年</button>
+                <button data-range="all" type="button">全期間</button>
+              </div>
+              <div id="companyChart" class="chart-box" role="img" aria-label="企業別チャート"></div>
+              <p id="companyChartNote" class="chart-note"></p>
+            </div>
+          </section>
+
+          <section id="companyNotes" class="comparison-grid" aria-label="企業別メモ"></section>
+        </section>
+
+        <section id="metricPage" class="page-section">
+          <section class="comparison-grid">
+            <div class="panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Metric Lab</p>
+                  <h2>企業と指標を選ぶ</h2>
+                </div>
+                <span class="status-badge muted">同一グラフ表示</span>
+              </div>
+              <div class="selector-layout">
+                <div>
+                  <p class="selector-title">企業</p>
+                  <div id="metricCompanySelector" class="checkbox-grid compact"></div>
+                </div>
+                <div>
+                  <p class="selector-title">指標</p>
+                  <div id="metricSelector" class="radio-grid"></div>
+                </div>
+              </div>
+              <div class="display-mode">
+                <p class="selector-title">金額指標の表示方法</p>
+                <div class="comparison-controls" role="tablist" aria-label="金額指標の表示方法">
+                  <button class="active" data-display-mode="index" type="button">指数</button>
+                  <button data-display-mode="usd" type="button">USD換算</button>
+                </div>
+              </div>
+              <label class="select-label base-period-label">
+                指数の基準
+                <select id="basePeriodSelect"></select>
+              </label>
+            </div>
+
+            <aside class="panel">
+              <p class="eyebrow">Reading Guide</p>
+              <h2>見方</h2>
+              <div class="insight-list">
+                <div class="insight-item">
+                  <strong>通貨差</strong>
+                  <p>売上・営業利益は会社ごとに通貨が違うため、指定した基準時点を100とした指数、または期中平均FXのUSD換算で比較します。</p>
+                </div>
+                <div class="insight-item">
+                  <strong>OPM</strong>
+                  <p>OPMは営業利益÷売上で計算し、%の実数で比較します。</p>
+                </div>
+                <div class="insight-item">
+                  <strong>在庫</strong>
+                  <p>在庫は会社ごとに開示粒度が違うため、定量値が揃った範囲から在庫回転率を表示します。</p>
+                </div>
+              </div>
+            </aside>
+          </section>
+
+          <section class="chart-grid">
+            <div class="panel chart-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">Metric Compare</p>
+                  <h2 id="metricChartTitle">指標比較</h2>
+                </div>
+                <div id="metricLegend" class="chart-legend"></div>
+              </div>
+              <div id="metricChart" class="chart-box" role="img" aria-label="指標比較チャート"></div>
+              <p id="metricChartNote" class="chart-note"></p>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Analyst Memos</p>
+                <h2>開示メモ</h2>
+              </div>
+              <div class="memo-tabs" role="tablist" aria-label="メモ切替">
+                <button class="active" data-memo-tab="inventory" type="button">在庫</button>
+                <button data-memo-tab="revenue" type="button">売上見通し</button>
+                <button data-memo-tab="profit" type="button">利益要因</button>
+                <button data-memo-tab="risk" type="button">リスク</button>
+              </div>
+            </div>
+            <div id="inventoryNotes" class="timeline"></div>
+            <div id="inventoryChart" class="chart-box comparison-chart" role="img" aria-label="在庫回転率チャート"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Suggested Metrics</p>
+                <h2>次に比較したい指標</h2>
+              </div>
+            </div>
+            <div id="suggestedMetrics" class="timeline"></div>
+          </section>
+        </section>
+
+        <section id="rawPage" class="page-section">
+          <section class="panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Raw Data</p>
+                <h2>企業別の生データ</h2>
+              </div>
+              <span class="status-badge muted">通貨換算前</span>
+            </div>
+            <div id="rawDataTable" class="table-wrap"></div>
+            <p class="chart-note">各社の開示通貨・開示単位のまま、取得済みの経営指標を縦持ちで表示。OPM、Non-GAAP OPM、純利益率は計算値です。</p>
+          </section>
+        </section>
+
+        <footer class="sources">
+          <span>出所:</span>
+          <a href="https://www.kioxia-holdings.com/ja-jp/ir/news.html?sumtag=financial-results" target="_blank" rel="noreferrer">キオクシア IRニュース</a>
+          <a href="https://news.samsung.com/global/samsung-electronics-announces-first-quarter-2023-results" target="_blank" rel="noreferrer">Samsung 2023 Q1 Results</a>
+          <a href="https://news.samsungsemiconductor.com/global/samsung-electronics-announces-second-quarter-2023-results/" target="_blank" rel="noreferrer">Samsung 2023 Q2 Results</a>
+          <a href="https://news.samsung.com/global/samsung-electronics-announces-third-quarter-2023-results" target="_blank" rel="noreferrer">Samsung 2023 Q3 Results</a>
+          <a href="https://news.samsung.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2023-results" target="_blank" rel="noreferrer">Samsung 2023 Q4 Results</a>
+          <a href="https://news.samsung.com/global/samsung-electronics-announces-first-quarter-2024-results" target="_blank" rel="noreferrer">Samsung 2024 Q1 Results</a>
+          <a href="https://news.samsung.com/global/samsung-electronics-announces-results-for-second-quarter-of-2024" target="_blank" rel="noreferrer">Samsung 2024 Q2 Results</a>
+          <a href="https://news.samsung.com/global/samsung-electronics-announces-second-quarter-2025-results" target="_blank" rel="noreferrer">Samsung 2025 Q2 Results</a>
+          <a href="https://news.samsung.com/global/samsung-electronics-announces-third-quarter-2025-results" target="_blank" rel="noreferrer">Samsung 2025 Q3 Results</a>
+          <a href="https://news.samsungsemiconductor.com/global/samsung-electronics-announces-fourth-quarter-and-fy-2025-results/" target="_blank" rel="noreferrer">Samsung 2025 Q4 Results</a>
+          <a href="https://news.skhynix.com/sk-hynix-announces-fy25-financial-results/" target="_blank" rel="noreferrer">SK hynix 2025 Results</a>
+          <a href="https://www.sandisk.com/company/newsroom/press-releases/2025/2025-11-6-sandisk-reports-fiscal-first-quarter-2026-financial-results" target="_blank" rel="noreferrer">SanDisk FY26 Q1 Results</a>
+          <a href="https://investor.sandisk.com/news-releases/news-release-details/sandisk-reports-fiscal-second-quarter-2026-financial-results" target="_blank" rel="noreferrer">SanDisk FY26 Q2 Results</a>
+          <a href="https://www.sandisk.com/company/newsroom/press-releases/2026/2026-04-30-sandisk-reports-fiscal-third-quarter-2026-financial-results" target="_blank" rel="noreferrer">SanDisk FY26 Q3 Results</a>
+        </footer>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
